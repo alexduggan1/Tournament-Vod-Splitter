@@ -1,0 +1,29 @@
+{
+  "query":
+	"query EventSets($eventId: ID!) {
+		event(id: $eventId) {
+			id
+			name
+			sets(perPage: 90, sortType: MAGIC) {
+				pageInfo {
+					total
+				}
+				nodes {
+					id
+					fullRoundText
+					slots {
+						id
+						entrant {
+							id
+							name
+						}
+						standing {
+							placement
+						}
+					}
+				}
+			}
+		}
+	}",
+	"variables": { "eventId": 0 }
+}
