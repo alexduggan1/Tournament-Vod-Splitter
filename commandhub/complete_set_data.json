@@ -1,0 +1,33 @@
+{
+  "query":
+	"query set($setId: ID!) {
+		set(id: $setId) {
+			id
+			slots {
+				id
+				entrant {
+					id
+					name
+				}
+				standing {
+					placement
+					stats {
+						score {
+							value
+						}
+					}
+				}
+			}
+			fullRoundText
+			games {
+				winnerId
+				selections {
+					character {
+						name
+					}
+				}
+			}
+		}
+	}",
+	"variables": { "setId": 0 }
+}

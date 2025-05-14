@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://basbmnhx15d02"]
+
+[ext_resource type="Script" path="res://set_obj.gd" id="1_sfei1"]
+
+[node name="SetObj" type="ColorRect"]
+custom_minimum_size = Vector2(520, 100)
+color = Color(0.0823529, 0.0823529, 0.0823529, 1)
+script = ExtResource("1_sfei1")
+
+[node name="TitleText" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(520, 60)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_right = 180.0
+offset_bottom = 60.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=20][center]ROUND NAME
+PLAYER 1 NAME vs PLAYER 2 NAME[/center][/font_size]"
+scroll_active = false
+
+[node name="InteractButton" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="InteractButton" to="." method="_on_interact_button_pressed"]

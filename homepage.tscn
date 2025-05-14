@@ -33,6 +33,146 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Update API Key"
 
+[node name="InitializationWindow" type="ColorRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -270.0
+offset_right = 480.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.172833, 0.172833, 0.172833, 1)
+
+[node name="TitleText" type="RichTextLabel" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_right = 180.0
+offset_bottom = 30.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Initialization[/center]"
+
+[node name="EventNameEntry" type="LineEdit" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -210.0
+offset_right = 320.0
+offset_bottom = -179.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="Background/InitializationWindow/EventNameEntry"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -300.0
+grow_vertical = 2
+bbcode_enabled = true
+text = "[right]Enter event name:  [/right]"
+scroll_active = false
+
+[node name="EventURLEntry" type="LineEdit" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -160.0
+offset_right = 320.0
+offset_bottom = -129.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="Background/InitializationWindow/EventURLEntry"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -300.0
+grow_vertical = 2
+bbcode_enabled = true
+text = "[right]Enter event URL:  [/right]"
+scroll_active = false
+
+[node name="VideoURLEntry" type="LineEdit" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -110.0
+offset_right = 320.0
+offset_bottom = -79.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="Background/InitializationWindow/VideoURLEntry"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -300.0
+grow_vertical = 2
+bbcode_enabled = true
+text = "[right]Enter video URL:  [/right]"
+scroll_active = false
+
+[node name="ConfirmButton" type="Button" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -32.0
+offset_right = 35.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "Confirm"
+
+[node name="InfoText" type="RichTextLabel" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(360, 160)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -40.0
+offset_right = 180.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+
 [node name="UpdateAPIKeyWindow" type="ColorRect" parent="Background"]
 visible = false
 layout_mode = 1
@@ -60,7 +200,7 @@ offset_bottom = 31.0
 grow_horizontal = 0
 text = "X"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Background/UpdateAPIKeyWindow"]
+[node name="TitleText" type="RichTextLabel" parent="Background/UpdateAPIKeyWindow"]
 custom_minimum_size = Vector2(360, 0)
 layout_mode = 1
 anchors_preset = 5
@@ -105,6 +245,78 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Confirm"
 
+[node name="MainPage" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+
+[node name="LeftSide" type="ColorRect" parent="MainPage"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 1360.0
+grow_vertical = 2
+color = Color(0.162066, 0.162066, 0.162066, 1)
+
+[node name="TitleText" type="RichTextLabel" parent="MainPage/LeftSide"]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_right = 180.0
+offset_bottom = 60.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=28][center]Project Title[/center][/font_size]"
+scroll_active = false
+
+[node name="RightSide" type="ColorRect" parent="MainPage"]
+custom_minimum_size = Vector2(540, 1080)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0.162066, 0.162066, 0.162066, 1)
+
+[node name="TitleText" type="RichTextLabel" parent="MainPage/RightSide"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_right = 180.0
+offset_bottom = 60.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=42][center]SETS[/center][/font_size]"
+scroll_active = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainPage/RightSide"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPage/RightSide/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
 [connection signal="pressed" from="Background/UpdateAPIKeyButton" to="." method="_on_update_api_key_button_pressed"]
+[connection signal="pressed" from="Background/InitializationWindow/ConfirmButton" to="." method="_on_initializationwindow_confirm_button_pressed"]
 [connection signal="pressed" from="Background/UpdateAPIKeyWindow/XButton" to="." method="_on_updateapikeywindow_x_button_pressed"]
 [connection signal="pressed" from="Background/UpdateAPIKeyWindow/ConfirmButton" to="." method="_on_updateapikeywindow_confirm_button_pressed"]
