@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://basbmnhx15d02"]
 
-[ext_resource type="Script" path="res://set_obj.gd" id="1_sfei1"]
+[ext_resource type="Script" uid="uid://c2htye08uinuo" path="res://set_obj.gd" id="1_sfei1"]
 
 [node name="SetObj" type="ColorRect"]
-custom_minimum_size = Vector2(520, 100)
+custom_minimum_size = Vector2(520, 70)
 color = Color(0.0823529, 0.0823529, 0.0823529, 1)
 script = ExtResource("1_sfei1")
 
@@ -13,9 +13,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -180.0
-offset_right = 180.0
-offset_bottom = 60.0
+offset_left = -260.0
+offset_top = 5.0
+offset_right = 260.0
+offset_bottom = 65.0
 grow_horizontal = 2
 bbcode_enabled = true
 text = "[font_size=20][center]ROUND NAME

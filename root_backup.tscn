@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2daa2iohvvqs"]
+
+[ext_resource type="Script" uid="uid://bb1cjj3marlu6" path="res://root_backup.gd" id="1_1lre5"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1lre5"]
+size = Vector2(4, 2.25)
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_1lre5")
+
+[node name="WebView" type="WebView" parent="."]
+url = "https://www.youtube.com/watch?v=O8tP2_wKSjM"
+resolution = Vector2(1280, 720)
+transparent = false
+"refresh rate" = 30
+capture_keys = true
+unloaded_warning = false
+calc_height = 0.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WebView"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.7, -0.36, 0)
+mesh = SubResource("PlaneMesh_1lre5")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)

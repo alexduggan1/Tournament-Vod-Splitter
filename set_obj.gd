@@ -19,9 +19,9 @@ func update_text():
 	var p2Score: String = "?"
 	
 	if(complete):
-		color = Color(21.0/255, 32.0/255, 76.0/255)
-		p1Score = str(set_data["slots"][0]["standing"]["stats"]["score"]["value"])
-		p2Score = str(set_data["slots"][1]["standing"]["stats"]["score"]["value"])
+		color = Color(21.0/255, 32.0/255, 156.0/255)
+		p1Score = str(int(set_data["slots"][0]["standing"]["stats"]["score"]["value"]))
+		p2Score = str(int(set_data["slots"][1]["standing"]["stats"]["score"]["value"]))
 	else:
 		color = Color(21.0/255, 21.0/255, 21.0/255)
 		if(set_data["slots"][0]["standing"]["placement"] == 1):
@@ -31,12 +31,16 @@ func update_text():
 			p1Score = "L"
 			p2Score = "W"
 	
-	var finalText = "[font_size=20][center]" + set_data["fullRoundText"] + "\n"
-	finalText = finalText + set_data["slots"][0]["entrant"]["name"].substr(0,20) + " " + p1Score + " - "
-	finalText = finalText + p2Score + " " + set_data["slots"][1]["entrant"]["name"].substr(0,20) + "[/center][/font_size]"
-	$TitleText.text = finalText
+	var p1DisplayName = set_data["slots"][0]["entrant"]["name"]
+	var p2DisplayName = set_data["slots"][1]["entrant"]["name"]
 	
-	color = Color(21.0/255, 21.0/255, 21.0/255)
+	if(len(p1DisplayName) > 20): p1DisplayName = p1DisplayName.substr(0, 17) + "..."
+	if(len(p2DisplayName) > 20): p2DisplayName = p2DisplayName.substr(0, 17) + "..."
+	
+	var finalText = "[font_size=20][center]" + set_data["fullRoundText"] + "\n"
+	finalText = finalText + p1DisplayName + " " + p1Score + " - "
+	finalText = finalText + p2Score + " " + p2DisplayName + "[/center][/font_size]"
+	$TitleText.text = finalText
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

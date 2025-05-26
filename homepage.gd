@@ -7,6 +7,7 @@ var user_prefs_path = "user://prefs.json"
 var default_user_prefs = "res://default_user_prefs.json"
 
 var startgg_api_key: String = ""
+var project_parent_path: String = ""
 
 
 var get_event_id_qf = "res://commandhub/get_event_id.json"
@@ -14,8 +15,11 @@ var get_sets_in_event_qf = "res://commandhub/get_sets_in_event.json"
 var complete_set_data_qf = "res://commandhub/complete_set_data.json"
 
 
+#stuff to store about each project
 var event_name: String = ""
+var video_url: String = ""
 var sets: Array[Dictionary] = []
+
 
 func store_prefs():
 	# check user prefs path
@@ -32,8 +36,9 @@ func store_prefs():
 	user_prefs = JSON.parse_string(f.get_as_text())
 	f.close()
 	
-	# update all fields (currently only one exists)
+	# update all fields
 	user_prefs["startgg_api_key"] = startgg_api_key
+	user_prefs["project_parent_path"] = project_parent_path
 	
 	f = FileAccess.open(user_prefs_path, FileAccess.WRITE)
 	f.store_string(JSON.stringify(user_prefs))
@@ -57,9 +62,11 @@ func _ready() -> void:
 	user_prefs = JSON.parse_string(f.get_as_text())
 	f.close()
 	startgg_api_key = user_prefs["startgg_api_key"]
+	project_parent_path = user_prefs["project_parent_path"]
 	
 	$Background.show()
-	$MainPage.hide()
+	$RightSide.hide()
+	$LeftSide.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -114,7 +121,7 @@ func get_sets_in_event(event_id: float) -> float:
 	f.close()
 	
 	
-	query_json["variables"]["eventId"] = event_id
+	query_json["variables"]["eventId"] = int(event_id)
 	
 	
 	
@@ -137,6 +144,9 @@ func get_sets_in_event(event_id: float) -> float:
 			return(-1)
 		return(-2)
 	
+	print(output_json)
+	
+	print(output_json["data"])
 	
 	sets = []
 	var amount_of_sets: int = len(output_json["data"]["event"]["sets"]["nodes"])
@@ -157,7 +167,7 @@ func complete_set_data(set_id: float, set_obj: SetObj) -> float:
 	f.close()
 	
 	
-	query_json["variables"]["setId"] = set_id
+	query_json["variables"]["setId"] = int(set_id)
 	
 	
 	var query = JSON.stringify(query_json, "")
@@ -198,11 +208,16 @@ func setup_main_page():
 		set_obj.homepage = self
 		set_obj.set_data = set_data
 		set_obj.update_text()
-		$MainPage/RightSide/ScrollContainer/VBoxContainer.add_child(set_obj)
+		$RightSide/ScrollContainer/VBoxContainer.add_child(set_obj)
 	
-	$MainPage/RightSide/TitleText.text = "[font_size=42][center]SETS (" + str(len(sets)) + ")[/center][/font_size]"
-	$MainPage/LeftSide/TitleText.text = "[font_size=28][center]" + event_name + "[/center][/font_size]"
+	$RightSide/TitleText.text = "[font_size=42][center]SETS (" + str(len(sets)) + ")[/center][/font_size]"
+	$LeftSide/TitleText.text = "[font_size=28][center]" + event_name + "[/center][/font_size]"
 
+
+func add_webview():
+	var webview_obj = preload("res://root_backup.tscn").instantiate()
+	webview_obj.URL = video_url
+	add_child(webview_obj)
 
 
 func _on_update_api_key_button_pressed() -> void:
@@ -233,7 +248,13 @@ func _on_initializationwindow_confirm_button_pressed() -> void:
 			$Background/InitializationWindow/InfoText.text = "[center]Request failed[/center]"
 		elif(exit_code == 0):
 			event_name = $Background/InitializationWindow/EventNameEntry.text
+			video_url = $Background/InitializationWindow/VideoURLEntry.text
 			$Background/InitializationWindow.hide()
 			$Background.hide()
-			$MainPage.show()
+			$RightSide.show()
+			$LeftSide.show()
 			setup_main_page()
+
+func _on_updateapikeywindow_file_dialog_dir_selected(dir: String) -> void:
+	print(dir)
+	project_parent_path = dir
