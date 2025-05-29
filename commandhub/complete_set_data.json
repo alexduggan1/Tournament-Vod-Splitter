@@ -25,6 +25,9 @@
 					character {
 						name
 					}
+					entrant {
+						id
+					}
 				}
 			}
 		}

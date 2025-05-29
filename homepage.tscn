@@ -61,7 +61,7 @@ grow_horizontal = 2
 bbcode_enabled = true
 text = "[center]Initialization[/center]"
 
-[node name="EventNameEntry" type="LineEdit" parent="Background/InitializationWindow"]
+[node name="ProjectNameEntry" type="LineEdit" parent="Background/InitializationWindow"]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -77,7 +77,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="RichTextLabel" parent="Background/InitializationWindow/EventNameEntry"]
+[node name="Label" type="RichTextLabel" parent="Background/InitializationWindow/ProjectNameEntry"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
 anchors_preset = 9
@@ -86,7 +86,7 @@ offset_left = -300.0
 offset_right = 1.0
 grow_vertical = 2
 bbcode_enabled = true
-text = "[right]Enter event name:  [/right]"
+text = "[right]Enter project name:  [/right]"
 scroll_active = false
 
 [node name="EventURLEntry" type="LineEdit" parent="Background/InitializationWindow"]
@@ -160,6 +160,28 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Confirm"
 
+[node name="OpenExistingButton" type="Button" parent="Background/InitializationWindow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -173.0
+offset_top = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Open Existing Project"
+
+[node name="FileDialog" type="FileDialog" parent="Background/InitializationWindow/OpenExistingButton"]
+title = "Open a .tvs File"
+initial_position = 1
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.tvs")
+
 [node name="InfoText" type="RichTextLabel" parent="Background/InitializationWindow"]
 custom_minimum_size = Vector2(360, 160)
 layout_mode = 1
@@ -177,6 +199,7 @@ grow_vertical = 2
 bbcode_enabled = true
 
 [node name="UpdateAPIKeyWindow" type="ColorRect" parent="Background"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -225,9 +248,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -120.0
+offset_top = -300.0
 offset_right = 250.0
-offset_bottom = -89.0
+offset_bottom = -269.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -249,9 +272,8 @@ grow_vertical = 0
 text = "Edit Project Parent Path"
 
 [node name="FileDialog" type="FileDialog" parent="Background/UpdateAPIKeyWindow/EditProjParentPath"]
-title = "Set Projects Parent Path"
+title = "Open a Directory"
 initial_position = 1
-visible = true
 ok_button_text = "Select Current Folder"
 file_mode = 2
 access = 2
@@ -283,8 +305,10 @@ color = Color(0.160784, 0.160784, 0.160784, 1)
 [node name="ProjectPane" type="ColorRect" parent="LeftSide"]
 custom_minimum_size = Vector2(670, 1070)
 layout_mode = 1
-offset_right = 670.0
-offset_bottom = 1070.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 675.0
+offset_bottom = 1075.0
 color = Color(0.233925, 0.233925, 0.233925, 1)
 
 [node name="TitleText" type="RichTextLabel" parent="LeftSide/ProjectPane"]
@@ -299,6 +323,104 @@ offset_bottom = 40.0
 grow_horizontal = 2
 bbcode_enabled = true
 text = "[font_size=28][center]PROJECT[/center][/font_size]"
+scroll_active = false
+
+[node name="ProjectNameEdit" type="LineEdit" parent="LeftSide/ProjectPane"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = 40.0
+offset_right = 250.0
+offset_bottom = 71.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="LeftSide/ProjectPane/ProjectNameEdit"]
+custom_minimum_size = Vector2(140, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -15.0
+offset_bottom = 15.0
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=20][center]Project Name:[/center][/font_size]"
+scroll_active = false
+
+[node name="OpenStartggLinkButton" type="Button" parent="LeftSide/ProjectPane"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 85.0
+offset_right = -100.0
+offset_bottom = 116.0
+grow_horizontal = 2
+text = "Open Start.gg Link"
+
+[node name="OpenVideoLinkButton" type="Button" parent="LeftSide/ProjectPane"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = 85.0
+offset_right = 80.0
+offset_bottom = 116.0
+grow_horizontal = 2
+text = "Open Video Link"
+
+[node name="SaveProjectButton" type="Button" parent="LeftSide/ProjectPane"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 100.0
+offset_top = 85.0
+offset_right = 260.0
+offset_bottom = 116.0
+grow_horizontal = 2
+text = "Save Project"
+
+[node name="Timer" type="Timer" parent="LeftSide/ProjectPane/SaveProjectButton"]
+wait_time = 2.0
+autostart = true
+ignore_time_scale = true
+
+[node name="FakeSetDetailsPane" type="ColorRect" parent="LeftSide"]
+custom_minimum_size = Vector2(670, 1070)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -675.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = 1075.0
+grow_horizontal = 0
+color = Color(0.233925, 0.233925, 0.233925, 1)
+
+[node name="TitleText" type="RichTextLabel" parent="LeftSide/FakeSetDetailsPane"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_right = 100.0
+offset_bottom = 40.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=28][center]SET DETAILS[/center][/font_size]"
 scroll_active = false
 
 [node name="SetDetailsPane" type="ColorRect" parent="LeftSide"]
@@ -327,6 +449,100 @@ grow_horizontal = 2
 bbcode_enabled = true
 text = "[font_size=28][center]SET DETAILS[/center][/font_size]"
 scroll_active = false
+
+[node name="MainInfo" type="RichTextLabel" parent="LeftSide/SetDetailsPane"]
+custom_minimum_size = Vector2(640, 60)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 50.0
+offset_right = 320.0
+offset_bottom = 90.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=20][center]ROUND NAME
+Player1 0-0 Player2[/center][/font_size]"
+scroll_active = false
+
+[node name="StreamedToggle" type="CheckButton" parent="LeftSide/SetDetailsPane"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -65.5
+offset_top = 110.0
+offset_right = 65.5
+offset_bottom = 141.0
+grow_horizontal = 2
+text = "Streamed?"
+
+[node name="StartTimeBox" type="LineEdit" parent="LeftSide/SetDetailsPane"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 145.0
+offset_right = -40.0
+offset_bottom = 176.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="LeftSide/SetDetailsPane/StartTimeBox"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = -30.0
+offset_right = 60.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=20][center]Start Time[/center][/font_size]"
+scroll_active = false
+
+[node name="EndTimeBox" type="LineEdit" parent="LeftSide/SetDetailsPane"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 145.0
+offset_right = 320.0
+offset_bottom = 176.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="LeftSide/SetDetailsPane/EndTimeBox"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = -30.0
+offset_right = 60.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=20][center]End Time[/center][/font_size]"
+scroll_active = false
+
+[node name="GamesContainer" type="VBoxContainer" parent="LeftSide/SetDetailsPane"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 185.0
+offset_right = 320.0
+offset_bottom = 225.0
+grow_horizontal = 2
 
 [node name="RightSide" type="ColorRect" parent="."]
 visible = false
@@ -372,7 +588,14 @@ size_flags_horizontal = 6
 
 [connection signal="pressed" from="Background/UpdateAPIKeyButton" to="." method="_on_update_api_key_button_pressed"]
 [connection signal="pressed" from="Background/InitializationWindow/ConfirmButton" to="." method="_on_initializationwindow_confirm_button_pressed"]
+[connection signal="pressed" from="Background/InitializationWindow/OpenExistingButton" to="." method="_on_open_existing_button_pressed"]
+[connection signal="file_selected" from="Background/InitializationWindow/OpenExistingButton/FileDialog" to="." method="open_project"]
 [connection signal="pressed" from="Background/UpdateAPIKeyWindow/XButton" to="." method="_on_updateapikeywindow_x_button_pressed"]
-[connection signal="pressed" from="Background/UpdateAPIKeyWindow/EditProjParentPath" to="." method="_on_updateapikeywindow_confirm_button_pressed"]
+[connection signal="pressed" from="Background/UpdateAPIKeyWindow/EditProjParentPath" to="." method="_on_updateapikey_edit_proj_parent_path_pressed"]
 [connection signal="dir_selected" from="Background/UpdateAPIKeyWindow/EditProjParentPath/FileDialog" to="." method="_on_updateapikeywindow_file_dialog_dir_selected"]
 [connection signal="pressed" from="Background/UpdateAPIKeyWindow/ConfirmButton" to="." method="_on_updateapikeywindow_confirm_button_pressed"]
+[connection signal="pressed" from="LeftSide/ProjectPane/OpenStartggLinkButton" to="." method="_on_open_startgg_link_button_pressed"]
+[connection signal="pressed" from="LeftSide/ProjectPane/OpenVideoLinkButton" to="." method="_on_open_video_link_button_pressed"]
+[connection signal="pressed" from="LeftSide/ProjectPane/SaveProjectButton" to="." method="save_project"]
+[connection signal="text_changed" from="LeftSide/SetDetailsPane/StartTimeBox" to="." method="_on_start_time_box_text_changed"]
+[connection signal="text_changed" from="LeftSide/SetDetailsPane/EndTimeBox" to="." method="_on_end_time_box_text_changed"]

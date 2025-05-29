@@ -10,16 +10,23 @@ var startgg_api_key: String = ""
 var project_parent_path: String = ""
 
 
+# query files
 var get_event_id_qf = "res://commandhub/get_event_id.json"
 var get_sets_in_event_qf = "res://commandhub/get_sets_in_event.json"
 var complete_set_data_qf = "res://commandhub/complete_set_data.json"
 
 
-#stuff to store about each project
-var event_name: String = ""
+# stuff to store about each project
+var project_name: String = ""
+var startgg_link: String = ""
 var video_url: String = ""
 var sets: Array[Dictionary] = []
+var proj_path: String = ""
 
+
+var current_set: SetObj = null
+
+var project_open: bool = false
 
 func store_prefs():
 	# check user prefs path
@@ -65,13 +72,32 @@ func _ready() -> void:
 	project_parent_path = user_prefs["project_parent_path"]
 	
 	$Background.show()
+	$Background/UpdateAPIKeyWindow.hide()
 	$RightSide.hide()
 	$LeftSide.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if(project_open):
+		project_name = $LeftSide/ProjectPane/ProjectNameEdit.text
+		# Set Details
+		if(current_set != null):
+			$LeftSide/SetDetailsPane.show()
+			$LeftSide/SetDetailsPane/MainInfo.text = current_set.main_info_text
+			current_set.on_stream = $LeftSide/SetDetailsPane/StreamedToggle.button_pressed
+			if(current_set.on_stream):
+				$LeftSide/SetDetailsPane/StartTimeBox.show()
+				$LeftSide/SetDetailsPane/EndTimeBox.show()
+			else:
+				$LeftSide/SetDetailsPane/StartTimeBox.hide()
+				$LeftSide/SetDetailsPane/EndTimeBox.hide()
+		else:
+			$LeftSide/SetDetailsPane.hide()
+		
+		if(Input.is_action_just_pressed("save")):
+			save_project()
+	
 
 
 
@@ -207,17 +233,143 @@ func setup_main_page():
 		var set_obj = preload("res://set_obj.tscn").instantiate()
 		set_obj.homepage = self
 		set_obj.set_data = set_data
+		set_obj.complete = false
+		set_obj.on_stream = false
+		set_obj.start_time = 0
+		set_obj.end_time = 0
+		set_obj.exported = false
 		set_obj.update_text()
 		$RightSide/ScrollContainer/VBoxContainer.add_child(set_obj)
 	
 	$RightSide/TitleText.text = "[font_size=42][center]SETS (" + str(len(sets)) + ")[/center][/font_size]"
-	$LeftSide/TitleText.text = "[font_size=28][center]" + event_name + "[/center][/font_size]"
+	$LeftSide/ProjectPane/ProjectNameEdit.text = project_name
+	project_open = true
 
 
-func add_webview():
-	var webview_obj = preload("res://root_backup.tscn").instantiate()
-	webview_obj.URL = video_url
-	add_child(webview_obj)
+func set_current_set(setObj: SetObj):
+	$LeftSide/SetDetailsPane/StreamedToggle.button_pressed = setObj.on_stream
+	$LeftSide/SetDetailsPane/StartTimeBox.text = str(setObj.start_time)
+	$LeftSide/SetDetailsPane/EndTimeBox.text = str(setObj.end_time)
+	
+	print(setObj.set_data["games"])
+	if(setObj.set_data["games"] != null):
+		for i in range(len(setObj.set_data["games"])):
+			var game_box = preload("res://game_box.tscn").instantiate()
+			game_box.homepage = self
+			game_box.set_obj = setObj
+			game_box.set_data = setObj.set_data
+			game_box.game_num = i
+			game_box.setup()
+			$LeftSide/SetDetailsPane/GamesContainer.add_child(game_box)
+	
+	current_set = setObj
+
+func create_project():
+	print(project_name)
+	
+	proj_path = project_parent_path + project_name + "/"
+	print(proj_path)
+	
+	DirAccess.make_dir_absolute(proj_path)
+	DirAccess.make_dir_absolute(proj_path + "/videos")
+	DirAccess.make_dir_absolute(proj_path + "/thumbnails")
+	
+	if(FileAccess.file_exists(proj_path + "proj.tvs")):
+		print("file already exists")
+		print("overwriting proj.tvs")
+	
+	# create proj.tvs
+	var save_file = FileAccess.open(proj_path + "proj.tvs", FileAccess.WRITE)
+	
+	var save_dict: Dictionary = {
+		"project_name": project_name,
+		"startgg_link": startgg_link,
+		"video_url": video_url,
+		"sets": [],
+		"proj_path": proj_path
+	}
+	
+	for i in range(len(sets)):
+		save_dict["sets"].append({
+			"set_data": sets[i],
+			"complete": false,
+			"on_stream": false,
+			"start_time": 0,
+			"end_time": 0,
+			"exported": false
+		})
+	
+	save_file.store_string(JSON.stringify(save_dict))
+	save_file.close()
+
+func save_project() -> void:
+	print(project_name)
+	
+	var new_proj_path = project_parent_path + project_name + "/"
+	print(new_proj_path)
+	
+	if(proj_path != new_proj_path):
+		DirAccess.rename_absolute(proj_path, new_proj_path)
+		proj_path = new_proj_path
+	
+	
+	if(FileAccess.file_exists(proj_path + "proj.tvs")):
+		print("file already exists")
+		print("overwriting proj.tvs (because it is a save)")
+	
+	# create proj.tvs
+	var save_file = FileAccess.open(proj_path + "proj.tvs", FileAccess.WRITE)
+	
+	var save_dict: Dictionary = {
+		"project_name": project_name,
+		"startgg_link": startgg_link,
+		"video_url": video_url,
+		"sets": [],
+		"proj_path": proj_path
+	}
+	
+	for i in range(len($RightSide/ScrollContainer/VBoxContainer.get_children())):
+		save_dict["sets"].append({
+			"set_data": $RightSide/ScrollContainer/VBoxContainer.get_child(i).set_data,
+			"complete": $RightSide/ScrollContainer/VBoxContainer.get_child(i).complete,
+			"on_stream": $RightSide/ScrollContainer/VBoxContainer.get_child(i).on_stream,
+			"start_time": $RightSide/ScrollContainer/VBoxContainer.get_child(i).start_time,
+			"end_time": $RightSide/ScrollContainer/VBoxContainer.get_child(i).end_time,
+			"exported": $RightSide/ScrollContainer/VBoxContainer.get_child(i).exported
+		})
+	
+	save_file.store_string(JSON.stringify(save_dict))
+	save_file.close()
+
+func open_project(path: String) -> void:
+	var f = FileAccess.open(path, FileAccess.READ)
+	var save_dict = JSON.parse_string(f.get_as_text())
+	f.close()
+	
+	project_name = save_dict["project_name"]
+	startgg_link = save_dict["startgg_link"]
+	video_url = save_dict["video_url"]
+	proj_path = save_dict["proj_path"]
+	
+	for i in range(len(save_dict["sets"])):
+		var set_obj = preload("res://set_obj.tscn").instantiate()
+		set_obj.homepage = self
+		set_obj.set_data = save_dict["sets"][i]["set_data"]
+		set_obj.complete = save_dict["sets"][i]["complete"]
+		set_obj.on_stream = save_dict["sets"][i]["on_stream"]
+		set_obj.start_time = save_dict["sets"][i]["start_time"]
+		set_obj.end_time = save_dict["sets"][i]["end_time"]
+		set_obj.exported = save_dict["sets"][i]["exported"]
+		set_obj.update_text()
+		$RightSide/ScrollContainer/VBoxContainer.add_child(set_obj)
+	
+	$RightSide/TitleText.text = "[font_size=42][center]SETS (" + str(len(sets)) + ")[/center][/font_size]"
+	$LeftSide/ProjectPane/ProjectNameEdit.text = project_name
+	project_open = true
+	
+	$Background.hide()
+	$LeftSide.show()
+	$RightSide.show()
 
 
 func _on_update_api_key_button_pressed() -> void:
@@ -247,14 +399,78 @@ func _on_initializationwindow_confirm_button_pressed() -> void:
 		elif(exit_code == -2):
 			$Background/InitializationWindow/InfoText.text = "[center]Request failed[/center]"
 		elif(exit_code == 0):
-			event_name = $Background/InitializationWindow/EventNameEntry.text
-			video_url = $Background/InitializationWindow/VideoURLEntry.text
-			$Background/InitializationWindow.hide()
-			$Background.hide()
-			$RightSide.show()
-			$LeftSide.show()
-			setup_main_page()
+			project_name = $Background/InitializationWindow/ProjectNameEntry.text
+			print(project_name)
+			if(! project_name.is_valid_filename()):
+				$Background/InitializationWindow/InfoText.text = "[center]Invalid project name[/center]"
+				project_name = ""
+			elif(DirAccess.dir_exists_absolute(project_parent_path + project_name + "/")):
+				$Background/InitializationWindow/InfoText.text = "[center]Project name already exists[/center]"
+				project_name = ""
+			else:
+				project_name = $Background/InitializationWindow/ProjectNameEntry.text
+				startgg_link = $Background/InitializationWindow/EventURLEntry.text
+				video_url = $Background/InitializationWindow/VideoURLEntry.text
+				$Background/InitializationWindow.hide()
+				$Background.hide()
+				$RightSide.show()
+				$LeftSide.show()
+				create_project()
+				setup_main_page()
 
 func _on_updateapikeywindow_file_dialog_dir_selected(dir: String) -> void:
 	print(dir)
-	project_parent_path = dir
+	project_parent_path = dir + "/"
+
+func _on_updateapikey_edit_proj_parent_path_pressed() -> void:
+	if(DirAccess.dir_exists_absolute(project_parent_path)):
+		$Background/UpdateAPIKeyWindow/EditProjParentPath/FileDialog.current_path = project_parent_path
+	$Background/UpdateAPIKeyWindow/EditProjParentPath/FileDialog.show()
+
+func _on_start_time_box_text_changed(new_text: String) -> void:
+	var success: bool = false
+	if(new_text.is_valid_int()):
+		current_set.start_time = int(new_text)
+		success = true
+	else:
+		print(new_text)
+		if(new_text.to_lower().contains("youtu")):
+			if(new_text.to_lower().contains("?t=")):
+				var numstart: int = new_text.find("?t=") + 3
+				print(new_text.substr(numstart))
+				if(new_text.substr(numstart).is_valid_int()):
+					current_set.start_time = int(new_text.substr(numstart))
+					$LeftSide/SetDetailsPane/StartTimeBox.text = str(current_set.start_time)
+					success = true
+	if(! success):
+		$LeftSide/SetDetailsPane/StartTimeBox.text = ""
+
+func _on_end_time_box_text_changed(new_text: String) -> void:
+	var success: bool = false
+	if(new_text.is_valid_int()):
+		current_set.end_time = int(new_text)
+		success = true
+	else:
+		print(new_text)
+		if(new_text.to_lower().contains("youtu")):
+			if(new_text.to_lower().contains("?t=")):
+				var numstart: int = new_text.find("?t=") + 3
+				print(new_text.substr(numstart))
+				if(new_text.substr(numstart).is_valid_int()):
+					current_set.end_time = int(new_text.substr(numstart))
+					$LeftSide/SetDetailsPane/EndTimeBox.text = str(current_set.end_time)
+					success = true
+	if(! success):
+		$LeftSide/SetDetailsPane/EndTimeBox.text = ""
+
+func _on_open_startgg_link_button_pressed() -> void:
+	OS.shell_open(startgg_link)
+
+func _on_open_video_link_button_pressed() -> void:
+	OS.shell_open(video_url)
+
+
+func _on_open_existing_button_pressed() -> void:
+	if(DirAccess.dir_exists_absolute(project_parent_path)):
+		$Background/InitializationWindow/OpenExistingButton/FileDialog.current_path = project_parent_path
+	$Background/InitializationWindow/OpenExistingButton/FileDialog.show()
