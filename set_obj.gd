@@ -14,6 +14,9 @@ var end_time: int = 0
 var exported: bool = false
 
 
+var p1chars: Array = []
+var p2chars: Array = []
+
 var my_color: Color
 var main_info_text = ""
 var homepage: Homepage
@@ -63,8 +66,42 @@ func _process(delta: float) -> void:
 		my_color = Color(21.0/255.0, 21.0/255.0, 21.0/255.0)
 	color = my_color
 
+func find_player_chars():
+	var p1ID = set_data["slots"][0]["entrant"]["id"]
+	var p2ID = set_data["slots"][1]["entrant"]["id"]
+	
+	var p1charstemp: Array = []
+	var p2charstemp: Array = []
+	
+	if(set_data["games"] != null):
+		for i in range(len(set_data["games"])):
+			var selections1 = set_data["games"][i]["selections"][0]
+			var selections2 = set_data["games"][i]["selections"][1]
+			
+			if(p1ID == selections1["entrant"]["id"]):
+				p1charstemp.append(selections1["character"]["name"])
+				p2charstemp.append(selections2["character"]["name"])
+			else:
+				p2charstemp.append(selections1["character"]["name"])
+				p1charstemp.append(selections2["character"]["name"])
+		
+		p1chars = []
+		for char in p1charstemp:
+			if (! p1chars.has(char)):
+				p1chars.append(char)
+		p2chars = []
+		for char in p2charstemp:
+			if (! p2chars.has(char)):
+				p2chars.append(char)
+		
+		print(p1chars)
+		print(p2chars)
+
 
 func _on_interact_button_pressed() -> void:
-	homepage.complete_set_data(set_data["id"], self)
+	if(! complete):
+		homepage.complete_set_data(set_data["id"], self)
+		find_player_chars()
+	
 	update_text()
 	homepage.set_current_set(self)

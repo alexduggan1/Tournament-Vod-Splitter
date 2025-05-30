@@ -238,6 +238,8 @@ func setup_main_page():
 		set_obj.start_time = 0
 		set_obj.end_time = 0
 		set_obj.exported = false
+		set_obj.p1chars = []
+		set_obj.p2chars = []
 		set_obj.update_text()
 		$RightSide/ScrollContainer/VBoxContainer.add_child(set_obj)
 	
@@ -296,7 +298,9 @@ func create_project():
 			"on_stream": false,
 			"start_time": 0,
 			"end_time": 0,
-			"exported": false
+			"exported": false,
+			"p1chars": [],
+			"p2chars": []
 		})
 	
 	save_file.store_string(JSON.stringify(save_dict))
@@ -335,7 +339,9 @@ func save_project() -> void:
 			"on_stream": $RightSide/ScrollContainer/VBoxContainer.get_child(i).on_stream,
 			"start_time": $RightSide/ScrollContainer/VBoxContainer.get_child(i).start_time,
 			"end_time": $RightSide/ScrollContainer/VBoxContainer.get_child(i).end_time,
-			"exported": $RightSide/ScrollContainer/VBoxContainer.get_child(i).exported
+			"exported": $RightSide/ScrollContainer/VBoxContainer.get_child(i).exported,
+			"p1chars": $RightSide/ScrollContainer/VBoxContainer.get_child(i).p1chars,
+			"p2chars": $RightSide/ScrollContainer/VBoxContainer.get_child(i).p2chars,
 		})
 	
 	save_file.store_string(JSON.stringify(save_dict))
@@ -360,6 +366,8 @@ func open_project(path: String) -> void:
 		set_obj.start_time = save_dict["sets"][i]["start_time"]
 		set_obj.end_time = save_dict["sets"][i]["end_time"]
 		set_obj.exported = save_dict["sets"][i]["exported"]
+		set_obj.p1chars = save_dict["sets"][i]["p1chars"]
+		set_obj.p2chars = save_dict["sets"][i]["p2chars"]
 		set_obj.update_text()
 		$RightSide/ScrollContainer/VBoxContainer.add_child(set_obj)
 	
@@ -370,6 +378,85 @@ func open_project(path: String) -> void:
 	$Background.hide()
 	$LeftSide.show()
 	$RightSide.show()
+
+func capture_thumbnail():
+	if(current_set != null):
+		var save_path = proj_path + "/thumbnails/" + get_export_name(current_set) + ".png"
+		print(save_path)
+		
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport.get_texture().get_image().save_png(save_path)
+
+func get_export_name(set_obj: SetObj) -> String:
+	var export_name: String = project_name
+	
+	var set_data = set_obj.set_data
+	# add round name
+	var round_name = ""
+	print(set_data["fullRoundText"])
+	if(set_data["fullRoundText"].to_lower() == "grand final"):
+		round_name = "GRAND FINALS"
+	elif(set_data["fullRoundText"].to_lower() == "winners final"):
+		round_name = "WINNERS FINALS"
+	elif(set_data["fullRoundText"].to_lower() == "losers final"):
+		round_name = "LOSERS FINALS"
+	elif(set_data["fullRoundText"].to_lower() == "losers semi-final"):
+		round_name = "LOSERS SEMIS"
+	
+	if(round_name == ""):
+		export_name = export_name + " - "
+	else:
+		export_name = export_name + " " + round_name + " - "
+	
+	# add player names
+	var player_section = ""
+	player_section += set_data["slots"][0]["entrant"]["name"]
+	
+	if(len(set_obj.p1chars) == 0): player_section += " "
+	else:
+		player_section += " ("
+		if(len(set_obj.p1chars) == 1): player_section += set_obj.p1chars[0]
+		else:
+			for i in range(len(set_obj.p1chars)-1):
+				player_section += set_obj.p1chars[i] + ", "
+			player_section += set_obj.p1chars[-1]
+		player_section += ") "
+	player_section += "Vs. "
+	
+	player_section += set_data["slots"][1]["entrant"]["name"]
+	
+	if(len(set_obj.p2chars) == 0): player_section += " "
+	else:
+		player_section += " ("
+		if(len(set_obj.p2chars) == 1): player_section += set_obj.p2chars[0]
+		else:
+			for i in range(len(set_obj.p2chars)-1):
+				player_section += set_obj.p2chars[i] + ", "
+			player_section += set_obj.p2chars[-1]
+		player_section += ")"
+	
+	export_name = export_name + player_section
+	print(export_name)
+	return(export_name)
+
+
+func _on_download_video_button_pressed() -> void:
+	if (current_set != null):
+		if (current_set.start_time == 0 and current_set.end_time == 0):
+			print("invalid start/end time")
+			return
+		var command_string = "cd \"" + project_parent_path + "\" && yt-dlp -P \"" + proj_path + "videos/\" -o \"" + get_export_name(current_set)
+		command_string += ".%(ext)s\" --download-sections *" + str(current_set.start_time) + "-" + str(current_set.end_time) + " \""
+		command_string += video_url + "\""
+		
+		print(command_string)
+		
+		var output = []
+		var exit_code = OS.execute("cmd.exe", ["/c", command_string], output)
+		
+		print(exit_code)
+		print(output)
+		
+		current_set.exported = true;
 
 
 func _on_update_api_key_button_pressed() -> void:
@@ -468,7 +555,6 @@ func _on_open_startgg_link_button_pressed() -> void:
 
 func _on_open_video_link_button_pressed() -> void:
 	OS.shell_open(video_url)
-
 
 func _on_open_existing_button_pressed() -> void:
 	if(DirAccess.dir_exists_absolute(project_parent_path)):

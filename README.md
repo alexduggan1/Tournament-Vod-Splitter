@@ -46,10 +46,14 @@ SetDetailsPane
 [+] if the slider button is true, change the color of the set on the right
 [+] if the slider button is true, show LineEdits to input the start and end time of the set
 - [+] (accepts the link you get when you click 'copy URL at current time' on a yt video and translates it to just seconds for use by yt-dlp)
-[] button at bottom to download the selected segment of the video
-- [] (this will automatically name the video properly)
-[] another button at bottom this time to export the thumbnail
-- [] again, properly named
+
 
 ThumbnailPane
 [] Generates a thumbnail with custom art? (mightybird art, mural art, or idk)
+[+] a button to export the thumbnail
+- [+] properly named
+[] Customization options?
+[+] button at bottom to download the selected segment of the video
+- [+] (this will automatically name the video properly)
+- [] do error handling / fixes for this
+[] button to update yt-dlp
