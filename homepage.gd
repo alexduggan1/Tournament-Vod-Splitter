@@ -2,6 +2,8 @@ extends Control
 
 class_name Homepage
 
+var character_art_dir: String = "C:/Users/Junii/Desktop/Important/SSBU/Character Renders/"
+
 var user_prefs: Dictionary
 var user_prefs_path = "user://prefs.json"
 var default_user_prefs = "res://default_user_prefs.json"
@@ -22,7 +24,10 @@ var startgg_link: String = ""
 var video_url: String = ""
 var sets: Array[Dictionary] = []
 var proj_path: String = ""
+var thumbnail_title: String = ""
 
+
+var customizing_thumbnail: bool = false
 
 var current_set: SetObj = null
 
@@ -75,12 +80,14 @@ func _ready() -> void:
 	$Background/UpdateAPIKeyWindow.hide()
 	$RightSide.hide()
 	$LeftSide.hide()
+	$LeftSide/ThumbnailPane/SuccessIndicator.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if(project_open):
 		project_name = $LeftSide/ProjectPane/ProjectNameEdit.text
+		thumbnail_title = $LeftSide/ProjectPane/ThumbnailTitleEdit.text
 		# Set Details
 		if(current_set != null):
 			$LeftSide/SetDetailsPane.show()
@@ -94,6 +101,17 @@ func _process(delta: float) -> void:
 				$LeftSide/SetDetailsPane/EndTimeBox.hide()
 		else:
 			$LeftSide/SetDetailsPane.hide()
+		
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/TitleTextHolder/ThumbnailTitle.text = "[font_size=50][center]" + thumbnail_title + "[/center][/font_size]"
+		
+		if(customizing_thumbnail):
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder/RoundName.text = "[font_size=32][center]" + $LeftSide/ThumbnailPane/RoundNameEdit.text + "[/center][/font_size]"
+			
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder/P1Name.text = "[font_size=50][center]" + $LeftSide/ThumbnailPane/P1NameEdit.text + "[/center][/font_size]"
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder/P2Name.text = "[font_size=50][center]" + $LeftSide/ThumbnailPane/P2NameEdit.text + "[/center][/font_size]"
+			
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone/P1Char.flip_h = $LeftSide/ThumbnailPane/P1Flip.button_pressed
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone/P2Char.flip_h = $LeftSide/ThumbnailPane/P2Flip.button_pressed
 		
 		if(Input.is_action_just_pressed("save")):
 			save_project()
@@ -245,6 +263,7 @@ func setup_main_page():
 	
 	$RightSide/TitleText.text = "[font_size=42][center]SETS (" + str(len(sets)) + ")[/center][/font_size]"
 	$LeftSide/ProjectPane/ProjectNameEdit.text = project_name
+	$LeftSide/ProjectPane/ThumbnailTitleEdit.text = thumbnail_title
 	project_open = true
 
 
@@ -264,7 +283,11 @@ func set_current_set(setObj: SetObj):
 			game_box.setup()
 			$LeftSide/SetDetailsPane/GamesContainer.add_child(game_box)
 	
+	if(! setObj.exported):
+		$LeftSide/ThumbnailPane/SuccessIndicator.hide()
 	current_set = setObj
+	
+	customizing_thumbnail = false
 
 func create_project():
 	print(project_name)
@@ -288,7 +311,8 @@ func create_project():
 		"startgg_link": startgg_link,
 		"video_url": video_url,
 		"sets": [],
-		"proj_path": proj_path
+		"proj_path": proj_path,
+		"thumbnail_title": thumbnail_title
 	}
 	
 	for i in range(len(sets)):
@@ -329,7 +353,8 @@ func save_project() -> void:
 		"startgg_link": startgg_link,
 		"video_url": video_url,
 		"sets": [],
-		"proj_path": proj_path
+		"proj_path": proj_path,
+		"thumbnail_title": thumbnail_title
 	}
 	
 	for i in range(len($RightSide/ScrollContainer/VBoxContainer.get_children())):
@@ -356,6 +381,7 @@ func open_project(path: String) -> void:
 	startgg_link = save_dict["startgg_link"]
 	video_url = save_dict["video_url"]
 	proj_path = save_dict["proj_path"]
+	thumbnail_title = save_dict["thumbnail_title"]
 	
 	for i in range(len(save_dict["sets"])):
 		var set_obj = preload("res://set_obj.tscn").instantiate()
@@ -373,11 +399,108 @@ func open_project(path: String) -> void:
 	
 	$RightSide/TitleText.text = "[font_size=42][center]SETS (" + str(len(sets)) + ")[/center][/font_size]"
 	$LeftSide/ProjectPane/ProjectNameEdit.text = project_name
+	$LeftSide/ProjectPane/ThumbnailTitleEdit.text = thumbnail_title
 	project_open = true
 	
 	$Background.hide()
 	$LeftSide.show()
 	$RightSide.show()
+
+
+func _on_generate_thumbnail_button_pressed() -> void:
+	if(current_set != null):
+		var set_data = current_set.set_data
+		
+		# do the round name
+		
+		var round_name = ""
+		print(set_data["fullRoundText"])
+		if(set_data["fullRoundText"].to_lower() == "grand final"):
+			round_name = "GRAND FINALS"
+		elif(set_data["fullRoundText"].to_lower() == "winners final"):
+			round_name = "WINNERS FINALS"
+		elif(set_data["fullRoundText"].to_lower() == "losers final"):
+			round_name = "LOSERS FINALS"
+		elif(set_data["fullRoundText"].to_lower() == "losers semi-final"):
+			round_name = "LOSERS SEMIS"
+		elif(! (set_data["fullRoundText"].to_lower().contains("winners") or set_data["fullRoundText"].to_lower().contains("losers"))):
+			round_name = "POOLS"
+		else:
+			round_name = set_data["fullRoundText"].to_upper()
+		
+		print(round_name)
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder/RoundName.text = "[font_size=32][center]" + round_name + "[/center][/font_size]"
+		
+		$LeftSide/ThumbnailPane/RoundNameEdit.text = round_name
+		
+		# do the player names
+		
+		var p1DisplayName: String = set_data["slots"][0]["entrant"]["name"]
+		var p2DisplayName: String = set_data["slots"][1]["entrant"]["name"]
+		
+		if(p1DisplayName.contains("|")):
+			p1DisplayName = p1DisplayName.substr(p1DisplayName.find("|") + 2).to_upper()
+		if(p2DisplayName.contains("|")):
+			p2DisplayName = p2DisplayName.substr(p2DisplayName.find("|") + 2).to_upper()
+		
+		if(len(p1DisplayName) > 20): p1DisplayName = p1DisplayName.substr(0, 17) + "..."
+		if(len(p2DisplayName) > 20): p2DisplayName = p2DisplayName.substr(0, 17) + "..."
+		
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder/P1Name.text = "[font_size=50][center]" + p1DisplayName + "[/center][/font_size]"
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder/P2Name.text = "[font_size=50][center]" + p2DisplayName + "[/center][/font_size]"
+		
+		
+		# do the characters now
+		
+		print(current_set.p1chars)
+		print(current_set.p2chars)
+		
+		if(len(current_set.p1chars) == 0): $LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone/P1Char.texture = null
+		else:
+			var image = Image.load_from_file(character_art_dir + current_set.p1chars[0] + ".png")
+			var texture = ImageTexture.create_from_image(image)
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone/P1Char.texture = texture
+		
+		if(len(current_set.p2chars) == 0): $LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone/P2Char.texture = null
+		else:
+			var image = Image.load_from_file(character_art_dir + current_set.p2chars[0] + ".png")
+			var texture = ImageTexture.create_from_image(image)
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone/P2Char.texture = texture
+		
+		# provide customization options
+		
+		$LeftSide/ThumbnailPane/P1NameEdit.text = p1DisplayName
+		$LeftSide/ThumbnailPane/P2NameEdit.text = p2DisplayName
+		
+		$LeftSide/ThumbnailPane/P1Flip.button_pressed = false
+		$LeftSide/ThumbnailPane/P2Flip.button_pressed = false
+		
+		
+		# round name editor
+		
+		
+		
+		customizing_thumbnail = true
+
+
+func _on_p_1_select_art_button_pressed() -> void:
+	$LeftSide/ThumbnailPane/P1SelectArtButton/FileDialog.current_dir = character_art_dir
+	$LeftSide/ThumbnailPane/P1SelectArtButton/FileDialog.show()
+
+func select_p1_charart(path: String) -> void:
+	var image = Image.load_from_file(path)
+	var texture = ImageTexture.create_from_image(image)
+	$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone/P1Char.texture = texture
+
+func _on_p_2_select_art_button_pressed() -> void:
+	$LeftSide/ThumbnailPane/P2SelectArtButton/FileDialog.current_dir = character_art_dir
+	$LeftSide/ThumbnailPane/P2SelectArtButton/FileDialog.show()
+
+func select_p2_charart(path: String) -> void:
+	var image = Image.load_from_file(path)
+	var texture = ImageTexture.create_from_image(image)
+	$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone/P2Char.texture = texture
+
 
 func capture_thumbnail():
 	if(current_set != null):
@@ -401,6 +524,10 @@ func get_export_name(set_obj: SetObj) -> String:
 		round_name = "LOSERS FINALS"
 	elif(set_data["fullRoundText"].to_lower() == "losers semi-final"):
 		round_name = "LOSERS SEMIS"
+	elif(! (set_data["fullRoundText"].to_lower().contains("winners") or set_data["fullRoundText"].to_lower().contains("losers"))):
+		round_name = "POOLS"
+	else:
+		round_name = set_data["fullRoundText"].to_upper()
 	
 	if(round_name == ""):
 		export_name = export_name + " - "
@@ -439,24 +566,60 @@ func get_export_name(set_obj: SetObj) -> String:
 	return(export_name)
 
 
+
+func _on_download_all_streamed_button_pressed() -> void:
+	for i in range(len($RightSide/ScrollContainer/VBoxContainer.get_children())):
+		var to_download: SetObj = $RightSide/ScrollContainer/VBoxContainer.get_child(i)
+		if(to_download.on_stream):
+			if(! to_download.exported):
+				download_set(to_download)
+
 func _on_download_video_button_pressed() -> void:
 	if (current_set != null):
-		if (current_set.start_time == 0 and current_set.end_time == 0):
-			print("invalid start/end time")
-			return
-		var command_string = "cd \"" + project_parent_path + "\" && yt-dlp -P \"" + proj_path + "videos/\" -o \"" + get_export_name(current_set)
-		command_string += ".%(ext)s\" --download-sections *" + str(current_set.start_time) + "-" + str(current_set.end_time) + " \""
-		command_string += video_url + "\""
-		
-		print(command_string)
-		
-		var output = []
-		var exit_code = OS.execute("cmd.exe", ["/c", command_string], output)
-		
-		print(exit_code)
-		print(output)
-		
-		current_set.exported = true;
+		download_set(current_set)
+
+func download_set(set_to_download: SetObj):
+	if (set_to_download.start_time == 0 and set_to_download.end_time == 0):
+		print("invalid start/end time")
+		return
+	
+	print("downloading set")
+	
+	$LeftSide/ThumbnailPane/SuccessIndicator.show()
+	$LeftSide/ThumbnailPane/SuccessIndicator.text = "[font_size=20][center]download started[/center][/font_size]"
+	
+	var dl_start = int(set_to_download.start_time)
+	dl_start = clampi(dl_start-5, 0, dl_start)
+	
+	var command_string = "cd \"" + project_parent_path + "\" && yt-dlp -P \"" + proj_path + "videos/\" -o \"" + get_export_name(set_to_download)
+	command_string += ".%(ext)s\" --download-sections *" + str(dl_start) + "-" + str(set_to_download.end_time) + " -f \"bv*+ba/b\" "
+	#command_string += "--concurrent-fragments 4 --verbose "
+	command_string += "\"" + video_url + "\""
+	
+	print(command_string)
+	
+	
+	var output = []
+	var exit_code = 0
+	#exit_code = OS.execute("cmd.exe", ["/c", command_string], output, false, true)
+	
+	OS.create_process("cmd.exe", ["/c", command_string], true)
+	
+	#var exit_dict = OS.execute_with_pipe("cmd.exe", ["/c", command_string], true)
+	#print(exit_dict)
+	
+	print(exit_code)
+	print(output)
+	
+	set_to_download.exported = true;
+
+func _on_update_ytdlp_button_pressed() -> void:
+	var command_string = "cd \"" + project_parent_path + "\" && yt-dlp -U"
+	
+	print(command_string)
+	
+	OS.create_process("cmd.exe", ["/c", command_string], true)
+
 
 
 func _on_update_api_key_button_pressed() -> void:
@@ -496,6 +659,7 @@ func _on_initializationwindow_confirm_button_pressed() -> void:
 				project_name = ""
 			else:
 				project_name = $Background/InitializationWindow/ProjectNameEntry.text
+				thumbnail_title = project_name
 				startgg_link = $Background/InitializationWindow/EventURLEntry.text
 				video_url = $Background/InitializationWindow/VideoURLEntry.text
 				$Background/InitializationWindow.hide()

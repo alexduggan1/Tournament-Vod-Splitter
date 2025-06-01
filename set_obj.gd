@@ -40,8 +40,13 @@ func update_text():
 			p1Score = "L"
 			p2Score = "W"
 	
-	var p1DisplayName = set_data["slots"][0]["entrant"]["name"]
-	var p2DisplayName = set_data["slots"][1]["entrant"]["name"]
+	var p1DisplayName: String = set_data["slots"][0]["entrant"]["name"]
+	var p2DisplayName: String = set_data["slots"][1]["entrant"]["name"]
+	
+	if(p1DisplayName.contains("|")):
+		p1DisplayName = p1DisplayName.substr(p1DisplayName.find("|") + 2)
+	if(p2DisplayName.contains("|")):
+		p2DisplayName = p2DisplayName.substr(p2DisplayName.find("|") + 2)
 	
 	if(len(p1DisplayName) > 20): p1DisplayName = p1DisplayName.substr(0, 17) + "..."
 	if(len(p2DisplayName) > 20): p2DisplayName = p2DisplayName.substr(0, 17) + "..."

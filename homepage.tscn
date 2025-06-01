@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bp1wsikkjnekq"]
 
 [ext_resource type="Script" uid="uid://f1q201y4pwsh" path="res://homepage.gd" id="1_hpxx2"]
-[ext_resource type="Texture2D" uid="uid://c6gnj5dlpn0b5" path="res://icon.svg" id="2_8jhgu"]
+[ext_resource type="Texture2D" uid="uid://cs0npw3ydlqxa" path="res://wpismashlogo.PNG" id="3_ooc05"]
 
 [node name="Homepage" type="Control"]
 layout_mode = 3
@@ -353,6 +353,33 @@ bbcode_enabled = true
 text = "[font_size=20][center]Project Name:[/center][/font_size]"
 scroll_active = false
 
+[node name="ThumbnailTitleEdit" type="LineEdit" parent="LeftSide/ProjectPane"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = 130.0
+offset_right = 250.0
+offset_bottom = 161.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="LeftSide/ProjectPane/ThumbnailTitleEdit"]
+custom_minimum_size = Vector2(140, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -12.5
+offset_bottom = 17.5
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=16][center]Thumbnail Title:[/center][/font_size]"
+scroll_active = false
+
 [node name="OpenStartggLinkButton" type="Button" parent="LeftSide/ProjectPane"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 1
@@ -396,6 +423,19 @@ text = "Save Project"
 wait_time = 2.0
 autostart = true
 ignore_time_scale = true
+
+[node name="DownloadAllStreamedButton" type="Button" parent="LeftSide/ProjectPane"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 190.0
+offset_right = 120.0
+offset_bottom = 221.0
+grow_horizontal = 2
+text = "Download All Streamed Sets"
 
 [node name="FakeSetDetailsPane" type="ColorRect" parent="LeftSide"]
 custom_minimum_size = Vector2(670, 530)
@@ -568,6 +608,21 @@ bbcode_enabled = true
 text = "[font_size=28][center]THUMBNAIL[/center][/font_size]"
 scroll_active = false
 
+[node name="TextCUSTOMIZE" type="RichTextLabel" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 240.0
+offset_top = 80.0
+offset_right = 440.0
+offset_bottom = 110.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=22][center]CUSTOMIZE[/center][/font_size]"
+scroll_active = false
+
 [node name="TextPREVIEW" type="RichTextLabel" parent="LeftSide/ThumbnailPane"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 1
@@ -597,14 +652,160 @@ grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 
 [node name="SubViewport" type="SubViewport" parent="LeftSide/ThumbnailPane/SubViewportContainer"]
+disable_3d = true
 handle_input_locally = false
 size = Vector2i(1280, 720)
 render_target_update_mode = 4
 
-[node name="Sprite2D" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
-position = Vector2(640, 360)
-scale = Vector2(5, 5)
-texture = ExtResource("2_8jhgu")
+[node name="Background" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.36283, 0.362829, 0.362829, 1)
+
+[node name="LeftZone" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
+clip_children = 2
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 640.0
+grow_vertical = 2
+color = Color(1, 0.301961, 0.294118, 1)
+
+[node name="P1Char" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone"]
+position = Vector2(320, 360)
+scale = Vector2(1.5, 1.5)
+
+[node name="RightZone" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
+clip_children = 2
+custom_minimum_size = Vector2(640, 0)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0.192157, 0.215686, 0.823529, 1)
+
+[node name="P2Char" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone"]
+position = Vector2(320, 360)
+scale = Vector2(1.5, 1.5)
+
+[node name="PlayerNamesHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
+custom_minimum_size = Vector2(0, 90)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 90.0
+grow_horizontal = 2
+color = Color(0.0807833, 0.0807833, 0.0807833, 1)
+
+[node name="P1NameHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder"]
+custom_minimum_size = Vector2(640, 90)
+layout_mode = 1
+offset_bottom = 90.0
+color = Color(0.0807833, 0.0807833, 0.0807833, 1)
+
+[node name="P1Name" type="RichTextLabel" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder"]
+custom_minimum_size = Vector2(640, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -37.0
+offset_right = 320.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=50][center]PLAYER 1 NAME[/center][/font_size]"
+scroll_active = false
+
+[node name="P2NameHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder"]
+custom_minimum_size = Vector2(640, 90)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -640.0
+offset_bottom = 90.0
+grow_horizontal = 0
+color = Color(0.0807833, 0.0807833, 0.0807833, 1)
+
+[node name="P2Name" type="RichTextLabel" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder"]
+custom_minimum_size = Vector2(640, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -37.0
+offset_right = 320.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=50][center]PLAYER 2 NAME[/center][/font_size]"
+scroll_active = false
+
+[node name="RoundNameHolder" type="Polygon2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
+position = Vector2(640, 580)
+color = Color(0.0823529, 0.0823529, 0.0823529, 1)
+polygon = PackedVector2Array(-130, -40, 130, -40, 220, 50, -220, 50)
+
+[node name="RoundName" type="RichTextLabel" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder"]
+custom_minimum_size = Vector2(480, 40)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = 12.0
+offset_right = 240.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=32][center]ROUND NAME[/center][/font_size]"
+scroll_active = false
+
+[node name="WPISmashLogo" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder"]
+position = Vector2(0, -50)
+texture = ExtResource("3_ooc05")
+
+[node name="TitleTextHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
+custom_minimum_size = Vector2(0, 90)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.0807833, 0.0807833, 0.0807833, 1)
+
+[node name="ThumbnailTitle" type="RichTextLabel" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/TitleTextHolder"]
+custom_minimum_size = Vector2(1280, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -37.0
+offset_right = 640.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=50][center]THUMBNAIL TITLE[/center][/font_size]"
+scroll_active = false
 
 [node name="GenerateThumbnailButton" type="Button" parent="LeftSide/ThumbnailPane"]
 custom_minimum_size = Vector2(160, 0)
@@ -613,9 +814,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 140.0
-offset_top = 50.0
+offset_top = 40.0
 offset_right = 300.0
-offset_bottom = 81.0
+offset_bottom = 71.0
 grow_horizontal = 2
 text = "Generate"
 
@@ -626,11 +827,125 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 380.0
-offset_top = 50.0
+offset_top = 40.0
 offset_right = 540.0
-offset_bottom = 81.0
+offset_bottom = 71.0
 grow_horizontal = 2
 text = "Export"
+
+[node name="P1NameEdit" type="LineEdit" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 70.0
+offset_top = 120.0
+offset_right = 310.0
+offset_bottom = 151.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="P1Flip" type="CheckButton" parent="LeftSide/ThumbnailPane"]
+layout_mode = 1
+offset_left = 745.0
+offset_top = 160.0
+offset_right = 821.0
+offset_bottom = 191.0
+text = "Flip"
+
+[node name="P1SelectArtButton" type="Button" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 170.0
+offset_top = 160.0
+offset_right = 310.0
+offset_bottom = 191.0
+grow_horizontal = 2
+text = "Select Art"
+
+[node name="FileDialog" type="FileDialog" parent="LeftSide/ThumbnailPane/P1SelectArtButton"]
+title = "Open a File"
+initial_position = 1
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.png")
+use_native_dialog = true
+
+[node name="P2NameEdit" type="LineEdit" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 370.0
+offset_top = 120.0
+offset_right = 610.0
+offset_bottom = 151.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="P2Flip" type="CheckButton" parent="LeftSide/ThumbnailPane"]
+layout_mode = 1
+offset_left = 1045.0
+offset_top = 160.0
+offset_right = 1121.0
+offset_bottom = 191.0
+text = "Flip"
+
+[node name="P2SelectArtButton" type="Button" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 470.0
+offset_top = 160.0
+offset_right = 610.0
+offset_bottom = 191.0
+grow_horizontal = 2
+text = "Select Art"
+
+[node name="FileDialog" type="FileDialog" parent="LeftSide/ThumbnailPane/P2SelectArtButton"]
+auto_translate_mode = 1
+title = "Open a File"
+initial_position = 1
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.png")
+use_native_dialog = true
+
+[node name="RoundNameEdit" type="LineEdit" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 230.0
+offset_top = 210.0
+offset_right = 590.0
+offset_bottom = 241.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="LeftSide/ThumbnailPane/RoundNameEdit"]
+custom_minimum_size = Vector2(140, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -12.5
+offset_bottom = 17.5
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=16][center]Round Name:[/center][/font_size]"
+scroll_active = false
 
 [node name="TextVIDEO" type="RichTextLabel" parent="LeftSide/ThumbnailPane"]
 custom_minimum_size = Vector2(200, 40)
@@ -639,9 +954,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 240.0
-offset_top = 250.0
+offset_top = 390.0
 offset_right = 440.0
-offset_bottom = 290.0
+offset_bottom = 430.0
 grow_horizontal = 2
 bbcode_enabled = true
 text = "[font_size=28][center]VIDEO[/center][/font_size]"
@@ -654,11 +969,40 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 260.0
-offset_top = 290.0
+offset_top = 430.0
 offset_right = 420.0
-offset_bottom = 321.0
+offset_bottom = 461.0
 grow_horizontal = 2
 text = "Download"
+
+[node name="UpdateYTDLPButton" type="Button" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Update yt-dlp"
+
+[node name="SuccessIndicator" type="RichTextLabel" parent="LeftSide/ThumbnailPane"]
+custom_minimum_size = Vector2(280, 40)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 240.0
+offset_top = 470.0
+offset_right = 440.0
+offset_bottom = 510.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[font_size=20][center]downloading...[/center][/font_size]"
+scroll_active = false
 
 [node name="RightSide" type="ColorRect" parent="."]
 visible = false
@@ -713,7 +1057,14 @@ size_flags_horizontal = 6
 [connection signal="pressed" from="LeftSide/ProjectPane/OpenStartggLinkButton" to="." method="_on_open_startgg_link_button_pressed"]
 [connection signal="pressed" from="LeftSide/ProjectPane/OpenVideoLinkButton" to="." method="_on_open_video_link_button_pressed"]
 [connection signal="pressed" from="LeftSide/ProjectPane/SaveProjectButton" to="." method="save_project"]
+[connection signal="pressed" from="LeftSide/ProjectPane/DownloadAllStreamedButton" to="." method="_on_download_all_streamed_button_pressed"]
 [connection signal="text_changed" from="LeftSide/SetDetailsPane/StartTimeBox" to="." method="_on_start_time_box_text_changed"]
 [connection signal="text_changed" from="LeftSide/SetDetailsPane/EndTimeBox" to="." method="_on_end_time_box_text_changed"]
+[connection signal="pressed" from="LeftSide/ThumbnailPane/GenerateThumbnailButton" to="." method="_on_generate_thumbnail_button_pressed"]
 [connection signal="pressed" from="LeftSide/ThumbnailPane/ExportThumbnailButton" to="." method="capture_thumbnail"]
+[connection signal="pressed" from="LeftSide/ThumbnailPane/P1SelectArtButton" to="." method="_on_p_1_select_art_button_pressed"]
+[connection signal="file_selected" from="LeftSide/ThumbnailPane/P1SelectArtButton/FileDialog" to="." method="select_p1_charart"]
+[connection signal="pressed" from="LeftSide/ThumbnailPane/P2SelectArtButton" to="." method="_on_p_2_select_art_button_pressed"]
+[connection signal="file_selected" from="LeftSide/ThumbnailPane/P2SelectArtButton/FileDialog" to="." method="select_p2_charart"]
 [connection signal="pressed" from="LeftSide/ThumbnailPane/DownloadVideoButton" to="." method="_on_download_video_button_pressed"]
+[connection signal="pressed" from="LeftSide/ThumbnailPane/UpdateYTDLPButton" to="." method="_on_update_ytdlp_button_pressed"]
