@@ -33,6 +33,25 @@ var current_set: SetObj = null
 
 var project_open: bool = false
 
+
+var player_mains_dict: Dictionary = {
+	"juni": "Greninja",
+	"turkeyboy2012": "Min Min",
+	"saxaslayer": "Isabelle",
+	"wright": "Falco",
+	"hermanvi": "Mii Swordfighter",
+	"unlimited will": "Captain Falcon",
+	"mightybird": "Kirby",
+	"piranha": "piranha plant",
+	"sneezles": "Ken",
+	"blucket": "Corrin",
+	"meili": "Palutena",
+	"araneae": "Ice Climbers",
+	"birdthorn": "Ike",
+	"j3ll0": "Random Character",
+}
+
+
 func store_prefs():
 	# check user prefs path
 	var userpath = DirAccess.open("user://")
@@ -102,13 +121,13 @@ func _process(delta: float) -> void:
 		else:
 			$LeftSide/SetDetailsPane.hide()
 		
-		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/TitleTextHolder/ThumbnailTitle.text = "[font_size=50][center]" + thumbnail_title + "[/center][/font_size]"
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/TitleTextHolder/ThumbnailTitle.text = "[font_size=50][center][b]" + thumbnail_title + "[/b][/center][/font_size]"
 		
 		if(customizing_thumbnail):
-			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder/RoundName.text = "[font_size=32][center]" + $LeftSide/ThumbnailPane/RoundNameEdit.text + "[/center][/font_size]"
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder/RoundName.text = "[font_size=32][center][b]" + $LeftSide/ThumbnailPane/RoundNameEdit.text + "[/b][/center][/font_size]"
 			
-			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder/P1Name.text = "[font_size=50][center]" + $LeftSide/ThumbnailPane/P1NameEdit.text + "[/center][/font_size]"
-			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder/P2Name.text = "[font_size=50][center]" + $LeftSide/ThumbnailPane/P2NameEdit.text + "[/center][/font_size]"
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder/P1Name.text = "[font_size=62][center][b]" + $LeftSide/ThumbnailPane/P1NameEdit.text + "[/b][/center][/font_size]"
+			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder/P2Name.text = "[font_size=62][center][b]" + $LeftSide/ThumbnailPane/P2NameEdit.text + "[/b][/center][/font_size]"
 			
 			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone/P1Char.flip_h = $LeftSide/ThumbnailPane/P1Flip.button_pressed
 			$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone/P2Char.flip_h = $LeftSide/ThumbnailPane/P2Flip.button_pressed
@@ -421,15 +440,21 @@ func _on_generate_thumbnail_button_pressed() -> void:
 			round_name = "WINNERS FINALS"
 		elif(set_data["fullRoundText"].to_lower() == "losers final"):
 			round_name = "LOSERS FINALS"
+		elif(set_data["fullRoundText"].to_lower() == "winners semi-final"):
+			round_name = "WINNERS SEMIS"
 		elif(set_data["fullRoundText"].to_lower() == "losers semi-final"):
 			round_name = "LOSERS SEMIS"
+		elif(set_data["fullRoundText"].to_lower() == "losers quarter-final"):
+			round_name = "LOSERS QUARTERS"
+		elif(set_data["fullRoundText"].to_lower() == "winners quarter-final"):
+			round_name = "WINNERS QUARTERS"
 		elif(! (set_data["fullRoundText"].to_lower().contains("winners") or set_data["fullRoundText"].to_lower().contains("losers"))):
 			round_name = "POOLS"
 		else:
 			round_name = set_data["fullRoundText"].to_upper()
 		
 		print(round_name)
-		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder/RoundName.text = "[font_size=32][center]" + round_name + "[/center][/font_size]"
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder/RoundName.text = "[font_size=32][center][b]" + round_name + "[/b][/center][/font_size]"
 		
 		$LeftSide/ThumbnailPane/RoundNameEdit.text = round_name
 		
@@ -439,15 +464,15 @@ func _on_generate_thumbnail_button_pressed() -> void:
 		var p2DisplayName: String = set_data["slots"][1]["entrant"]["name"]
 		
 		if(p1DisplayName.contains("|")):
-			p1DisplayName = p1DisplayName.substr(p1DisplayName.find("|") + 2).to_upper()
+			p1DisplayName = p1DisplayName.substr(p1DisplayName.find("|") + 2)
 		if(p2DisplayName.contains("|")):
-			p2DisplayName = p2DisplayName.substr(p2DisplayName.find("|") + 2).to_upper()
+			p2DisplayName = p2DisplayName.substr(p2DisplayName.find("|") + 2)
 		
 		if(len(p1DisplayName) > 20): p1DisplayName = p1DisplayName.substr(0, 17) + "..."
 		if(len(p2DisplayName) > 20): p2DisplayName = p2DisplayName.substr(0, 17) + "..."
 		
-		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder/P1Name.text = "[font_size=50][center]" + p1DisplayName + "[/center][/font_size]"
-		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder/P2Name.text = "[font_size=50][center]" + p2DisplayName + "[/center][/font_size]"
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder/P1Name.text = "[font_size=62][center][b]" + p1DisplayName + "[/b][/center][/font_size]"
+		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P2NameHolder/P2Name.text = "[font_size=62][center][b]" + p2DisplayName + "[/b][/center][/font_size]"
 		
 		
 		# do the characters now
@@ -504,7 +529,14 @@ func select_p2_charart(path: String) -> void:
 
 func capture_thumbnail():
 	if(current_set != null):
-		var save_path = proj_path + "/thumbnails/" + get_export_name(current_set) + ".png"
+		var save_path: String = ""
+		var exp_name = get_export_name(current_set)
+		
+		if(exp_name.is_valid_filename()):
+			save_path = proj_path + "thumbnails/" + exp_name + ".png"
+		else:
+			save_path = proj_path + "thumbnails/" + "workaround.png"
+			print(proj_path + "thumbnails/" + exp_name + ".png")
 		print(save_path)
 		
 		$LeftSide/ThumbnailPane/SubViewportContainer/SubViewport.get_texture().get_image().save_png(save_path)
@@ -522,8 +554,14 @@ func get_export_name(set_obj: SetObj) -> String:
 		round_name = "WINNERS FINALS"
 	elif(set_data["fullRoundText"].to_lower() == "losers final"):
 		round_name = "LOSERS FINALS"
+	elif(set_data["fullRoundText"].to_lower() == "winners semi-final"):
+		round_name = "WINNERS SEMIS"
 	elif(set_data["fullRoundText"].to_lower() == "losers semi-final"):
 		round_name = "LOSERS SEMIS"
+	elif(set_data["fullRoundText"].to_lower() == "losers quarter-final"):
+		round_name = "LOSERS QUARTERS"
+	elif(set_data["fullRoundText"].to_lower() == "winners quarter-final"):
+		round_name = "WINNERS QUARTERS"
 	elif(! (set_data["fullRoundText"].to_lower().contains("winners") or set_data["fullRoundText"].to_lower().contains("losers"))):
 		round_name = "POOLS"
 	else:
@@ -536,7 +574,22 @@ func get_export_name(set_obj: SetObj) -> String:
 	
 	# add player names
 	var player_section = ""
-	player_section += set_data["slots"][0]["entrant"]["name"]
+	
+	var p1DisplayName: String = set_data["slots"][0]["entrant"]["name"]
+	var p2DisplayName: String = set_data["slots"][1]["entrant"]["name"]
+	
+	if(p1DisplayName.contains("|")):
+		p1DisplayName = p1DisplayName.substr(p1DisplayName.find("|") + 2)
+	if(p2DisplayName.contains("|")):
+		p2DisplayName = p2DisplayName.substr(p2DisplayName.find("|") + 2)
+	
+	p1DisplayName = p1DisplayName.replace("/", "")
+	p2DisplayName = p2DisplayName.replace("/", "")
+	
+	if(len(p1DisplayName) > 20): p1DisplayName = p1DisplayName.substr(0, 17)
+	if(len(p2DisplayName) > 20): p2DisplayName = p2DisplayName.substr(0, 17)
+	
+	player_section += p1DisplayName
 	
 	if(len(set_obj.p1chars) == 0): player_section += " "
 	else:
@@ -547,9 +600,9 @@ func get_export_name(set_obj: SetObj) -> String:
 				player_section += set_obj.p1chars[i] + ", "
 			player_section += set_obj.p1chars[-1]
 		player_section += ") "
-	player_section += "Vs. "
+	player_section += "Vs "
 	
-	player_section += set_data["slots"][1]["entrant"]["name"]
+	player_section += p2DisplayName
 	
 	if(len(set_obj.p2chars) == 0): player_section += " "
 	else:

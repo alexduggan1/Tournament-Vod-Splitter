@@ -35,6 +35,7 @@ File stuff, project saving
 [+] ctrl + s saves
 [+] button to save
 [+] open a previous file rather than start a new one (from the startup page)
+[] autosaving
 
 ProjectPane
 [+] editable project name LineEdit
@@ -53,14 +54,16 @@ SetDetailsPane
 
 
 ThumbnailPane
-[] Generates a thumbnail with custom art? (mightybird art, mural art, or idk)
+[+] Generates a thumbnail with custom art? (mightybird art, mural art, or idk)
 [+] a button to export the thumbnail
 - [+] properly named
 [+] Thumbnail customization options?
+[] Customize the little logo as well?
 
 [+] button at bottom to download the selected segment of the video
 - [+] (this will automatically name the video properly)
 [+] button to update yt-dlp
+[] auto-update yt-dlp on startup?
 
 
 Extra art to get

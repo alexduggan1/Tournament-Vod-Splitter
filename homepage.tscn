@@ -674,8 +674,8 @@ grow_vertical = 2
 color = Color(1, 0.301961, 0.294118, 1)
 
 [node name="P1Char" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/LeftZone"]
-position = Vector2(320, 360)
-scale = Vector2(1.5, 1.5)
+position = Vector2(320, 370)
+scale = Vector2(1.4, 1.4)
 
 [node name="RightZone" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
 clip_children = 2
@@ -689,11 +689,11 @@ grow_vertical = 2
 color = Color(0.192157, 0.215686, 0.823529, 1)
 
 [node name="P2Char" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RightZone"]
-position = Vector2(320, 360)
-scale = Vector2(1.5, 1.5)
+position = Vector2(320, 370)
+scale = Vector2(1.4, 1.4)
 
 [node name="PlayerNamesHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 100)
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 90.0
@@ -701,9 +701,10 @@ grow_horizontal = 2
 color = Color(0.0807833, 0.0807833, 0.0807833, 1)
 
 [node name="P1NameHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder"]
-custom_minimum_size = Vector2(640, 90)
+custom_minimum_size = Vector2(640, 100)
 layout_mode = 1
-offset_bottom = 90.0
+offset_right = 640.0
+offset_bottom = 100.0
 color = Color(0.0807833, 0.0807833, 0.0807833, 1)
 
 [node name="P1Name" type="RichTextLabel" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder/P1NameHolder"]
@@ -715,17 +716,17 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -320.0
-offset_top = -37.0
+offset_top = -44.0
 offset_right = 320.0
-offset_bottom = 43.0
+offset_bottom = 36.0
 grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
-text = "[font_size=50][center]PLAYER 1 NAME[/center][/font_size]"
+text = "[font_size=62][center][b]PLAYER 1 NAME[/b][/center][/font_size]"
 scroll_active = false
 
 [node name="P2NameHolder" type="ColorRect" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/PlayerNamesHolder"]
-custom_minimum_size = Vector2(640, 90)
+custom_minimum_size = Vector2(640, 100)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -744,13 +745,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -320.0
-offset_top = -37.0
+offset_top = -44.0
 offset_right = 320.0
-offset_bottom = 43.0
+offset_bottom = 36.0
 grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
-text = "[font_size=50][center]PLAYER 2 NAME[/center][/font_size]"
+text = "[font_size=62][center][b]PLAYER 2 NAME[/b][/center][/font_size]"
 scroll_active = false
 
 [node name="RoundNameHolder" type="Polygon2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport"]
@@ -772,7 +773,7 @@ offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
-text = "[font_size=32][center]ROUND NAME[/center][/font_size]"
+text = "[font_size=32][center][b]ROUND NAME[/b][/center][/font_size]"
 scroll_active = false
 
 [node name="WPISmashLogo" type="Sprite2D" parent="LeftSide/ThumbnailPane/SubViewportContainer/SubViewport/RoundNameHolder"]
@@ -804,7 +805,7 @@ offset_bottom = 43.0
 grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
-text = "[font_size=50][center]THUMBNAIL TITLE[/center][/font_size]"
+text = "[font_size=50][center][b]THUMBNAIL TITLE[/b][/center][/font_size]"
 scroll_active = false
 
 [node name="GenerateThumbnailButton" type="Button" parent="LeftSide/ThumbnailPane"]
